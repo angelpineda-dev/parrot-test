@@ -4,8 +4,15 @@ import { Box, Container, Typography } from "@mui/material";
 import LoginForm from "./components/LoginForm/LoginForm";
 /* Styles */
 import "./styles/login.css";
+import { useAuth } from "../../context/auth/AuthProvider";
+import { Navigate } from "react-router";
 
 const Login = () => {
+	const auth = useAuth();
+
+	if (auth.isAuthenticated) {
+		return <Navigate to="/" />;
+	}
 	return (
 		<Container
 			sx={{

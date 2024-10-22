@@ -1,6 +1,7 @@
 /* Libraries */
 import { useForm } from "react-hook-form";
 import { Button, TextField } from "@mui/material";
+import { useAuth } from "../../../../context/auth/AuthProvider";
 
 type FormValues = {
 	email: string;
@@ -8,6 +9,7 @@ type FormValues = {
 };
 
 const LoginForm = () => {
+	const auth = useAuth();
 	const {
 		register,
 		handleSubmit,
@@ -35,6 +37,10 @@ const LoginForm = () => {
 
 	const onSubmit = (data: FormValues) => {
 		console.log(data);
+
+		try {
+			auth.setAuthTokens("access", "refresh");
+		} catch (error) {}
 	};
 	return (
 		<form className="login-form" onSubmit={handleSubmit(onSubmit)}>
