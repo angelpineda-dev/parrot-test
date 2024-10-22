@@ -1,33 +1,11 @@
 /* Libraries */
-import { Box, Button, Container, TextField, Typography } from "@mui/material";
+import { Box, Container, Typography } from "@mui/material";
+/* Components */
+import LoginForm from "./components/LoginForm/LoginForm";
 /* Styles */
 import "./styles/login.css";
-import { useForm } from "react-hook-form";
 
 const Login = () => {
-	const { register, handleSubmit } = useForm();
-
-	const formFields = {
-		email: register("email", {
-			required: {
-				value: true,
-				message: "Field required",
-			},
-			onChange: (e) => console.log(e.target.value),
-		}),
-		password: register("password", {
-			required: {
-				value: true,
-				message: "Field required",
-			},
-			onChange: (e) => console.log(e.target.value),
-		}),
-	};
-
-	const onSubmit = (data, event) => {
-		console.log(data, event);
-	};
-
 	return (
 		<Container
 			sx={{
@@ -54,33 +32,7 @@ const Login = () => {
 					Login
 				</Typography>
 
-				<form className="login-form" onSubmit={handleSubmit(onSubmit)}>
-					<TextField
-						error={false}
-						id="login-email"
-						label="Email"
-						helperText="email error"
-						variant="outlined"
-						type="email"
-						required
-						{...formFields.email}
-					/>
-
-					<TextField
-						error={false}
-						id="login-password"
-						label="Password"
-						type="password"
-						variant="outlined"
-						helperText="password error"
-						required
-						{...formFields.password}
-					/>
-
-					<Button type="submit" variant="outlined">
-						Enviar
-					</Button>
-				</form>
+				<LoginForm />
 			</Box>
 		</Container>
 	);
