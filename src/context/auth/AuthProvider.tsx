@@ -1,10 +1,22 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import Loader from "../../components/Loader/Loader";
+import requestData from "../../helpers/request";
+import { useAxios } from "../axios/AxiosProvider";
+import { IAuhToken } from "../../interfaces";
 
-const AuthContext = createContext({
+interface IAuthContext {
+	logout: () => void;
+	isAuthenticated: boolean;
+	getAccessToken: () => string;
+	accessToken: string;
+	setAuthTokens: (_accessToken: string, _refreshToken: string) => void;
+}
+
+const AuthContext = createContext<IAuthContext>({
 	logout: () => {},
 	isAuthenticated: false,
-	getAccessToken: () => {},
+	getAccessToken: () => "",
+	accessToken: "",
 	setAuthTokens: (_accessToken: string, _refreshToken: string) => {},
 });
 
@@ -13,6 +25,7 @@ interface AuthProviderProps {
 }
 
 export function AuthProvider({ children }: AuthProviderProps) {
+	const { axiosInstance, setAxiosToken } = useAxios();
 	const [accessToken, setAccessToken] = useState("");
 	const [refreshToken, setRefreshToken] = useState("");
 	const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -21,6 +34,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
 	function setAuthTokens(accessToken: string, refreshToken: string) {
 		setAccessToken(accessToken);
 		setRefreshToken(refreshToken);
+		setIsAuthenticated(true);
+		setAxiosToken(accessToken);
 
 		localStorage.setItem("token", JSON.stringify(refreshToken));
 	}
@@ -33,7 +48,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
 		localStorage.removeItem("token");
 		setAccessToken("");
 		setRefreshToken("");
-		// petition to remove token?
+		setIsAuthenticated(false);
 	}
 
 	async function checkAuth() {
@@ -43,23 +58,33 @@ export function AuthProvider({ children }: AuthProviderProps) {
 			if (!!accessToken) {
 				setAccessToken(accessToken);
 				setIsAuthenticated(true);
-				setIsLoading(false);
 			} else {
 				const token = localStorage.getItem("token");
 
 				if (token) {
 					const refreshToken = JSON.parse(token);
 
-					//-> /api/auth/token/refresh
-					// refresh
-					// set data
+					const response: IAuhToken = await axiosInstance.post(
+						`/auth/token/refresh`,
+						{
+							refresh: refreshToken,
+						}
+					);
+
+					const { access, refresh } = response;
+
+					setAuthTokens(access, refresh);
 				}
 			}
 		} catch (error) {
-			console.error(error);
-			// show alert with error
+		} finally {
+			setIsLoading(false);
 		}
 	}
+
+	useEffect(() => {
+		checkAuth();
+	}, []);
 
 	return (
 		<AuthContext.Provider
@@ -67,6 +92,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
 				logout,
 				setAuthTokens,
 				getAccessToken,
+				accessToken,
 				isAuthenticated,
 			}}
 		>

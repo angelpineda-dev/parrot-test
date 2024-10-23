@@ -2,14 +2,20 @@
 import { useForm } from "react-hook-form";
 import { Button, TextField } from "@mui/material";
 import { useAuth } from "../../../../context/auth/AuthProvider";
+import { useAxios } from "../../../../context/axios/AxiosProvider";
+import { IAuhToken } from "../../../../interfaces";
 
 type FormValues = {
 	email: string;
 	password: string;
 };
 
+const EMAIL = import.meta.env.VITE_EMAIL || "";
+
 const LoginForm = () => {
 	const auth = useAuth();
+	const { axiosInstance } = useAxios();
+
 	const {
 		register,
 		handleSubmit,
@@ -35,11 +41,16 @@ const LoginForm = () => {
 		}),
 	};
 
-	const onSubmit = (data: FormValues) => {
-		console.log(data);
-
+	const onSubmit = async (data: FormValues) => {
 		try {
-			auth.setAuthTokens("access", "refresh");
+			const response: IAuhToken = await axiosInstance?.post("/auth/token", {
+				username: data?.email,
+				password: data?.password,
+			});
+
+			console.log(response);
+			const { access, refresh } = response;
+			auth.setAuthTokens(access, refresh);
 		} catch (error) {}
 	};
 	return (
@@ -51,6 +62,7 @@ const LoginForm = () => {
 				helperText={errors.email?.message}
 				variant="outlined"
 				type="email"
+				defaultValue={EMAIL}
 				{...formFields.email}
 			/>
 
