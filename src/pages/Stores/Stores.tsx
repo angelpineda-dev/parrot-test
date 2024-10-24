@@ -6,14 +6,15 @@ import {
 	ListItemText,
 	Typography,
 } from "@mui/material";
-
 import StorefrontIcon from "@mui/icons-material/Storefront";
 import { useNavigate } from "react-router";
+import useStorePage from "../../hooks/useStorePage";
 
 const Stores = () => {
+	const { stores } = useStorePage();
 	const navigate = useNavigate();
 
-	function handleRedirect(storeID: number) {
+	function handleRedirect(storeID: string) {
 		navigate(`/store-details/${storeID}`);
 	}
 
@@ -27,12 +28,17 @@ const Stores = () => {
 				sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}
 				component="nav"
 			>
-				<ListItemButton onClick={() => handleRedirect(0)}>
-					<ListItemIcon>
-						<StorefrontIcon />
-					</ListItemIcon>
-					<ListItemText primary="First Store" />
-				</ListItemButton>
+				{stores.map((store) => (
+					<ListItemButton
+						onClick={() => handleRedirect(store.uuid)}
+						key={store.uuid}
+					>
+						<ListItemIcon sx={{ color: store.config.brandColor }}>
+							<StorefrontIcon />
+						</ListItemIcon>
+						<ListItemText primary={store.name} />
+					</ListItemButton>
+				))}
 			</List>
 		</Container>
 	);
