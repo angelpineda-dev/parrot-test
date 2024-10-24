@@ -1,6 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import Loader from "../../components/Loader/Loader";
-import requestData from "../../helpers/request";
 import { useAxios } from "../axios/AxiosProvider";
 import { IAuhToken } from "../../interfaces";
 
