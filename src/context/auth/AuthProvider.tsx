@@ -9,6 +9,7 @@ interface IAuthContext {
 	getAccessToken: () => string;
 	accessToken: string;
 	setAuthTokens: (_accessToken: string, _refreshToken: string) => void;
+	isLoading: boolean;
 }
 
 const AuthContext = createContext<IAuthContext>({
@@ -17,6 +18,7 @@ const AuthContext = createContext<IAuthContext>({
 	getAccessToken: () => "",
 	accessToken: "",
 	setAuthTokens: (_accessToken: string, _refreshToken: string) => {},
+	isLoading: false,
 });
 
 interface AuthProviderProps {
@@ -28,7 +30,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
 	const [accessToken, setAccessToken] = useState("");
 	const [refreshToken, setRefreshToken] = useState("");
 	const [isAuthenticated, setIsAuthenticated] = useState(false);
-	const [isLoading, setIsLoading] = useState(false);
+	const [isLoading, setIsLoading] = useState(true);
 
 	function setAuthTokens(accessToken: string, refreshToken: string) {
 		setAccessToken(accessToken);
@@ -93,9 +95,10 @@ export function AuthProvider({ children }: AuthProviderProps) {
 				getAccessToken,
 				accessToken,
 				isAuthenticated,
+				isLoading,
 			}}
 		>
-			{isLoading ? <Loader /> : children}
+			{children}
 		</AuthContext.Provider>
 	);
 }

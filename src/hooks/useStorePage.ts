@@ -26,7 +26,10 @@ export default function useStorePage() {
 		}
 	}
 
-	async function getProducts(storeID: string) {
+	async function getProducts(storeID?: string) {
+		if (!storeID) {
+			return;
+		}
 		try {
 			const response: IProductResponse = await axiosInstance.get(
 				`/v1/products/?store=${storeID}`
