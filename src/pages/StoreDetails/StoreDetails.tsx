@@ -10,7 +10,7 @@ const StoreDetails = () => {
 	const { id: storeID } = useParams();
 	const categories = useUserStore((state) => state.categories);
 	const stores: Store[] = useUserStore((state) => state.stores);
-	const { getProducts } = useStorePage();
+	const { getProducts, getMe } = useStorePage();
 
 	/**
 	 * getStoreName
@@ -26,6 +26,12 @@ const StoreDetails = () => {
 	useEffect(() => {
 		getProducts(storeID);
 	}, [storeID]);
+
+	useEffect(() => {
+		if (stores.length < 1) {
+			getMe();
+		}
+	}, [stores]);
 
 	return (
 		<Container>
