@@ -4,7 +4,9 @@
   "version": "0.0.0",
   "scripts": {
     "dev": "vite --port 3000",
+    "start:test": "vite --mode test --port 3001",
     "build": "tsc -b && vite build",
+    "build:test": "vite build --mode test",
     "lint": "eslint . --fix",
     "preview": "vite preview"
   },
