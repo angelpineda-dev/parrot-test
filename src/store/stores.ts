@@ -7,8 +7,14 @@ import { IMeResponse, IProductResponse } from "@/interfaces";
 import { Product } from "@/interfaces/IProductResponse";
 import { Store } from "@/interfaces/IMeResponse";
 
+interface user {
+	uuid: string;
+	username: string;
+	email: string;
+}
+
 interface IUserStore {
-	user: object;
+	user: user;
 	stores: Store[];
 	products: Product[];
 	categories: ICategory[];
@@ -18,7 +24,11 @@ interface IUserStore {
 
 export const useUserStore = create<IUserStore>()(
 	devtools((set) => ({
-		user: {},
+		user: {
+			uuid: "",
+			username: "",
+			email: "",
+		},
 		stores: [],
 		products: [],
 		categories: [],
