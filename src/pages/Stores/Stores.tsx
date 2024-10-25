@@ -9,14 +9,21 @@ import {
 import StorefrontIcon from "@mui/icons-material/Storefront";
 import { useNavigate } from "react-router";
 import useStorePage from "../../hooks/useStorePage";
+import { useUserStore } from "@/store/stores";
+import { useEffect } from "react";
 
 const Stores = () => {
-	const { stores } = useStorePage();
 	const navigate = useNavigate();
+	const { getMe } = useStorePage();
+	const stores = useUserStore((state) => state.stores);
 
 	function handleRedirect(storeID: string) {
 		navigate(`/store-details/${storeID}`);
 	}
+
+	useEffect(() => {
+		getMe();
+	}, []);
 
 	return (
 		<Container>
