@@ -44,12 +44,14 @@ const Stores = () => {
 					margin: "0 auto",
 				}}
 				component="nav"
+				data-testid="store-list"
 			>
 				{stores.map((store) => (
 					<ListItemButton
 						onClick={() => handleRedirect(store.uuid)}
 						divider
 						key={store.uuid}
+						className="store-list-item"
 					>
 						<ListItemIcon sx={{ color: store.config.brandColor }}>
 							<StorefrontIcon />

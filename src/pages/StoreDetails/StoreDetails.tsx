@@ -45,7 +45,10 @@ const StoreDetails = () => {
 				{getStoreName()}
 			</Typography>
 
-			<List sx={{ width: "100%", maxWidth: "800px", margin: "0 auto" }}>
+			<List
+				sx={{ width: "100%", maxWidth: "800px", margin: "0 auto" }}
+				data-testid="store-detail-item"
+			>
 				{categories.map((category) => (
 					<ProductSublist key={category.uuid} {...category} />
 				))}

@@ -10,8 +10,6 @@ type FormValues = {
 	password: string;
 };
 
-const EMAIL = import.meta.env.VITE_EMAIL || "";
-
 const LoginForm = () => {
 	const auth = useAuth();
 	const { axiosInstance } = useAxios();
@@ -62,7 +60,7 @@ const LoginForm = () => {
 				helperText={errors.email?.message}
 				variant="outlined"
 				type="email"
-				defaultValue={EMAIL}
+				data-testid="login-email"
 				{...formFields.email}
 			/>
 
@@ -73,10 +71,11 @@ const LoginForm = () => {
 				type="password"
 				variant="outlined"
 				helperText={errors.password?.message}
+				data-testid="login-password"
 				{...formFields.password}
 			/>
 
-			<Button type="submit" variant="outlined">
+			<Button type="submit" variant="outlined" data-testid="login-submit">
 				Enviar
 			</Button>
 		</form>

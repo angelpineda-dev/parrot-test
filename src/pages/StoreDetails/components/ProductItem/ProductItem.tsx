@@ -58,10 +58,14 @@ const ProductItem = ({ name, uuid, availability, imageUrl }: Product) => {
 
 	return (
 		<List component="div" disablePadding>
-			<ListItemButton sx={{ pl: 4 }}>
+			<ListItemButton sx={{ pl: 4 }} data-testid="product-list">
 				<img src={imageUrl} alt={name} className="product-img" />
 				<ListItemText primary={name} />
-				<Switch checked={switchState} onChange={() => updateProduct(uuid)} />
+				<Switch
+					checked={switchState}
+					onChange={() => updateProduct(uuid)}
+					data-testid="switch-element"
+				/>
 			</ListItemButton>
 		</List>
 	);
