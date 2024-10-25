@@ -8,6 +8,7 @@ import { IProductUpdateResponse } from "@/interfaces/IProductUpdateResponse";
 import useStorePage from "@/hooks/useStorePage";
 
 import "./styles/productItem.css";
+import { useUiContext } from "@/context/ui/UiProvider";
 
 function getSwitchState(state: string) {
 	if (state == "AVAILABLE") {
@@ -23,8 +24,10 @@ const ProductItem = ({ name, uuid, availability, imageUrl }: Product) => {
 	const { axiosInstance } = useAxios();
 	const { id: storeID } = useParams();
 	const refSwitch = useRef(false);
+	const { setIsLoading } = useUiContext();
 
 	async function updateProduct(uuid: string) {
+		setIsLoading(true);
 		try {
 			const response: IProductUpdateResponse = await axiosInstance.put(
 				`/v1/products/${uuid}/availability`,
@@ -39,6 +42,8 @@ const ProductItem = ({ name, uuid, availability, imageUrl }: Product) => {
 			}
 		} catch (error) {
 			toast.error(`Error al actualizar el producto: ${name}`);
+		} finally {
+			setIsLoading(false);
 		}
 	}
 
