@@ -6,10 +6,10 @@ import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
 /* Components */
 import ProductItem from "../ProductItem/ProductItem";
+import { ICategory } from "@/interfaces/models";
 /* Interfaces */
-import { Category } from "../../../../interfaces/models/ProductItem";
 
-const ProductSublist = ({ name, products }: Category) => {
+const ProductSublist = ({ name, products }: ICategory) => {
 	const [open, setOpen] = useState(false);
 
 	const handleClick = () => {
@@ -23,7 +23,7 @@ const ProductSublist = ({ name, products }: Category) => {
 			</ListItemButton>
 			<Collapse in={open} timeout="auto" unmountOnExit>
 				{products.map((product) => (
-					<ProductItem key={product.id} {...product} />
+					<ProductItem key={product.uuid} {...product} />
 				))}
 			</Collapse>
 		</>

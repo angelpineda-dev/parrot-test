@@ -1,24 +1,58 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { List, ListItemButton, ListItemText, Switch } from "@mui/material";
-import { Product } from "../../../../interfaces/models";
+import { Product } from "@/interfaces/IProductResponse";
+import { useAxios } from "@/context/axios/AxiosProvider";
+import { useParams } from "react-router";
+import { IProductUpdateResponse } from "@/interfaces/IProductUpdateResponse";
+import useStorePage from "@/hooks/useStorePage";
 
-const ProductItem = ({ name }: Product) => {
-	const [switchState, setSwitchState] = useState(false);
+function getSwitchState(state: string) {
+	if (state == "AVAILABLE") {
+		return true;
+	} else {
+		return false;
+	}
+}
 
-	const handleSwitch = (e: React.ChangeEvent<HTMLInputElement>) => {
-		console.log(e.target.value);
+const ProductItem = ({ name, uuid, availability }: Product) => {
+	const [switchState, setSwitchState] = useState(getSwitchState(availability));
+	const { getProducts } = useStorePage();
+	const { axiosInstance } = useAxios();
+	const { id: storeID } = useParams();
+	const switchRef = useRef(false);
+
+	const handleSwitch = () => {
 		setSwitchState(!switchState);
 	};
 
+	async function updateProduct(uuid: string, value: boolean) {
+		const response: IProductUpdateResponse = await axiosInstance.put(
+			`/v1/products/${uuid}/availability`,
+			{
+				availability: value ? "AVAILABLE" : "UNAVAILABLE",
+			}
+		);
+
+		if (response.status == "ok" && storeID) {
+			getProducts(storeID);
+		}
+	}
+
 	useEffect(() => {
-		// petition
+		/* avois first render petition */
+		if (!switchRef.current) {
+			switchRef.current = true;
+			return;
+		}
+
+		updateProduct(uuid, switchState);
 	}, [switchState]);
 
 	return (
 		<List component="div" disablePadding>
 			<ListItemButton sx={{ pl: 4 }}>
 				<ListItemText primary={name} />
-				<Switch value={switchState} onChange={(e) => handleSwitch(e)} />
+				<Switch checked={switchState} onChange={handleSwitch} />
 			</ListItemButton>
 		</List>
 	);

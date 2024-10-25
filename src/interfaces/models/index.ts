@@ -1,1 +1,1 @@
-export type { Product } from "./ProductItem";
+export type { ICategory } from "./ICategory";
