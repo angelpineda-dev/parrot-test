@@ -3,13 +3,14 @@ import { useEffect } from "react";
 /* Libraries */
 import { useAxios } from "@/context/axios/AxiosProvider";
 /* store */
-import { useUserStore } from "@/store/useUserStore";
+import { useUserStore } from "@/store/stores";
 /* interfaces */
-import { IMeResponse } from "@/interfaces";
+import { IMeResponse, IProductResponse } from "@/interfaces";
 
 export default function useStorePage() {
 	const { axiosInstance } = useAxios();
 	const setStore = useUserStore((state) => state.setStore);
+	const setProducts = useUserStore((state) => state.setProducts);
 	const stores = useUserStore((state) => state.stores);
 
 	/**
@@ -25,11 +26,24 @@ export default function useStorePage() {
 		}
 	}
 
+	async function getProducts(storeID: string) {
+		try {
+			const response: IProductResponse = await axiosInstance.get(
+				`/v1/products/?store=${storeID}`
+			);
+
+			setProducts(response);
+		} catch (error) {
+			console.error(error);
+		}
+	}
+
 	useEffect(() => {
 		getMe();
 	}, []);
 
 	return {
 		stores,
+		getProducts,
 	};
 }

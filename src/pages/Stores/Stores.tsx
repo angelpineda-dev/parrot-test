@@ -11,11 +11,12 @@ import { useNavigate } from "react-router";
 import useStorePage from "../../hooks/useStorePage";
 
 const Stores = () => {
-	const { stores } = useStorePage();
+	const { stores, getProducts } = useStorePage();
 	const navigate = useNavigate();
 
 	function handleRedirect(storeID: string) {
 		navigate(`/store-details/${storeID}`);
+		getProducts(storeID);
 	}
 
 	return (
