@@ -5,6 +5,7 @@ import { useAxios } from "@/context/axios/AxiosProvider";
 import { useParams } from "react-router";
 import { IProductUpdateResponse } from "@/interfaces/IProductUpdateResponse";
 import useStorePage from "@/hooks/useStorePage";
+import { toast } from "react-toastify";
 
 function getSwitchState(state: string) {
 	if (state == "AVAILABLE") {
@@ -34,6 +35,7 @@ const ProductItem = ({ name, uuid, availability }: Product) => {
 		);
 
 		if (response.status == "ok" && storeID) {
+			toast.success("Producto actualizado correctamente.");
 			getProducts(storeID);
 		}
 	}

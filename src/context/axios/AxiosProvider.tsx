@@ -1,6 +1,7 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext } from "react";
 import axios, { AxiosInstance } from "axios";
-import { useAuth } from "../auth/AuthProvider";
+
+import { toast } from "react-toastify";
 
 // Define the shape of the context
 interface AxiosContext {
@@ -38,14 +39,11 @@ export default function AxiosProvider({ children }: AxiosProviderProps) {
 
 	axiosInstance.interceptors.response.use(
 		function (response) {
-			// Any status code that lie within the range of 2xx cause this function to trigger
-			// Do something with response data
-
 			return response?.data;
 		},
 		function (error) {
-			// Any status codes that falls outside the range of 2xx cause this function to trigger
-			// Do something with response error
+			console.log(error.response);
+			toast.error(error?.response?.data?.message);
 			return Promise.reject(error);
 		}
 	);
