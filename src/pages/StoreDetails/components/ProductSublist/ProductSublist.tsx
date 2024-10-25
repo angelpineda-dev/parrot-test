@@ -17,7 +17,7 @@ const ProductSublist = ({ name, products }: ICategory) => {
 	};
 	return (
 		<>
-			<ListItemButton onClick={handleClick}>
+			<ListItemButton onClick={handleClick} divider>
 				<ListItemText primary={`${name} (${products.length})`} />
 				{open ? <ExpandLess /> : <ExpandMore />}
 			</ListItemButton>

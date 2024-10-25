@@ -21,17 +21,28 @@ const Stores = () => {
 
 	return (
 		<Container>
-			<Typography variant="h2" component="h1" textAlign="center" my={4}>
+			<Typography
+				variant="h2"
+				component="h1"
+				textAlign="center"
+				my={4}
+				color="primary"
+			>
 				My Stores
 			</Typography>
 
 			<List
-				sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}
+				sx={{
+					width: "100%",
+					maxWidth: "800px",
+					margin: "0 auto",
+				}}
 				component="nav"
 			>
 				{stores.map((store) => (
 					<ListItemButton
 						onClick={() => handleRedirect(store.uuid)}
+						divider
 						key={store.uuid}
 					>
 						<ListItemIcon sx={{ color: store.config.brandColor }}>
