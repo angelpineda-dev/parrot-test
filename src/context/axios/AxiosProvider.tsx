@@ -10,7 +10,7 @@ interface AxiosContext {
 }
 
 const defaultAxiosIsnstance = axios.create({
-	baseURL: import.meta.env.VITE_BASE_URL || "",
+	baseURL: import.meta.env.VITE_BASE_URL + "/api" || "",
 	headers: {
 		"Content-Type": "application/json",
 	},
@@ -29,7 +29,7 @@ interface AxiosProviderProps {
 
 export default function AxiosProvider({ children }: AxiosProviderProps) {
 	const axiosInstance = axios.create({
-		baseURL: import.meta.env.VITE_BASE_URL || "",
+		baseURL: import.meta.env.VITE_BASE_URL + "/api" || "",
 		headers: {
 			"Content-Type": "application/json",
 			/* Authorization: `Bearer ${axiosToken}`, */
